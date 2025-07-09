@@ -37,6 +37,7 @@ const userInfoSchema = new mongoose.Schema({
     patientName: { type: String, required: true },
     patientAge:{type : Number , required:true},
     medicineName: { type: String, required: true },
+    treatmentSection: { type: String, required: true },
     doctorName: { type: String, required: true },
     reminderTime: { type: String, required: true },
     dosage: { type: String, required: true },
@@ -89,6 +90,7 @@ const userInfoSchema_validation = z.object({
 )
 ,
     medicineName: z.string().min(1),
+    treatmentSection: z.string().min(1),
     doctorName: z.string().min(1),
     reminderTime: z.string(),
     dosage: z.string().min(1),
@@ -262,7 +264,7 @@ function generateMockRecommendation(userInfo) {
     return `
         <h4>Personalized Health Recommendations for ${userInfo.patientName}</h4>
         <p><strong>Based on your medication:</strong> ${userInfo.medicineName}</p>
-        
+         ${userInfo.tratmentSection}
         <h5>💊 Medication Tips:</h5>
         <ul>
             <li>Take your medication at ${userInfo.reminderTime} consistently every day</li>
