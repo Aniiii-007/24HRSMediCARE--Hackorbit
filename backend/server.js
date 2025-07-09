@@ -36,10 +36,16 @@ const userInfoSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     patientName: { type: String, required: true },
     patientAge:{type : Number , required:true},
-    medicineName: { type: String, required: true },
-    treatmentSection: { type: String, required: true },
+    medicineName1:{ type : String, required:true},
+    medicineName2:{type : String, required:true},
+    medicineName3:{type : String, required:true},
+    medicineName4:{type : String, required:true},
+    treatmentSection:{ type : String, required:true},
     doctorName: { type: String, required: true },
-    reminderTime: { type: String, required: true },
+    reminderTimeformedicine1: { type: String, required: true },
+    reminderTimeformedicine2: { type: String, required: true },
+    reminderTimeformedicine3: { type: String, required: true },
+    reminderTimeformedicine4: { type: String, required: true },
     dosage: { type: String, required: true },
     breakfastTime: { type: String },
     lunchTime: { type: String },
@@ -87,12 +93,17 @@ const userInfoSchema_validation = z.object({
         return undefined; // Reject invalid input
     },
     z.number().min(1, "Age must be at least 1").max(150, "Age must be less than 150")
-)
-,
-    medicineName: z.string().min(1),
+),
+    medicineName1: z.string().min(1),
+    medicineName2: z.string().min(1),
+    medicineName3: z.string().min(1),
+    medicineName4: z.string().min(1),
     treatmentSection: z.string().min(1),
     doctorName: z.string().min(1),
-    reminderTime: z.string(),
+    reminderTimeformedicine1: z.string(),
+    reminderTimeformedicine2: z.string(),
+    reminderTimeformedicine3: z.string(),
+    reminderTimeformedicine4: z.string(),
     dosage: z.string().min(1),
     breakfastTime: z.string().optional(),
     lunchTime: z.string().optional(),
@@ -263,11 +274,17 @@ app.get('/api/ai/recommendation', authenticateToken, async (req, res) => {
 function generateMockRecommendation(userInfo) {
     return `
         <h4>Personalized Health Recommendations for ${userInfo.patientName}</h4>
-        <p><strong>Based on your medication:</strong> ${userInfo.medicineName}</p>
+        <p><strong>Based on your medication:</strong> ${userInfo.medicineName1}</p>
+        <p><strong>Based on your medication:</strong> ${userInfo.medicineName2}</p>
+        <p><strong>Based on your medication:</strong> ${userInfo.medicineName3}</p>
+        <p><strong>Based on your medication:</strong> ${userInfo.medicineName4}</p>
          ${userInfo.treatmentSection}
         <h5>💊 Medication Tips:</h5>
         <ul>
-            <li>Take your medication at ${userInfo.reminderTime} consistently every day</li>
+            <li>Take your medication at ${userInfo.reminderTimeformedicine1} consistently every day</li>
+            <li>Take your medication at ${userInfo.reminderTimeformedicine2} consistently every day</li>
+            <li>Take your medication at ${userInfo.reminderTimeformedicine3} consistently every day</li>
+            <li>Take your medication at ${userInfo.reminderTimeformedicine4} consistently every day</li>
             <li>Follow the prescribed dosage: ${userInfo.dosage}</li>
             <li>Set up reminders to avoid missing doses</li>
         </ul>
@@ -287,7 +304,7 @@ function generateMockRecommendation(userInfo) {
             <li>Report any side effects to your healthcare provider</li>
         </ul>
 
-        <h5>⚠️ Important Reminders:</h5>
+        <h5>Important Reminders:</h5>
         <ul>
             <li>Never stop or change medication without consulting your doctor</li>
             <li>Keep emergency contact information readily available</li>
@@ -306,7 +323,8 @@ app.post('/api/notifications/sms', authenticateToken, async (req, res) => {
         }
 
         // Mock SMS sending (implement with Twilio or similar service)
-        console.log(`Sending SMS to ${userInfo.phoneNumber}: Time to take your ${userInfo.medicineName} (${userInfo.dosage})`);
+        console.log(`Reminder SMS to ${userInfo.phoneNumber}: 
+Take ${userInfo.medicineName1}, ${userInfo.medicineName2}, ${userInfo.medicineName3}, ${userInfo.medicineName4}`);
 
         res.json({ message: 'SMS notification sent successfully' });
     } catch (error) {
@@ -323,8 +341,15 @@ cron.schedule('* * * * *', async () => {
         const currentTime = new Date().toTimeString().slice(0, 5);
         
         // Find all users with reminder time matching current time
-        const usersWithReminders = await UserInfo.find({ reminderTime: currentTime });
-        
+        const usersWithReminders = await UserInfo.find({
+    $or: [
+        { reminderTimeformedicine1: currentTime },
+        { reminderTimeformedicine2: currentTime },
+        { reminderTimeformedicine3: currentTime },
+        { reminderTimeformedicine4: currentTime }
+    ]
+});
+
         for (const userInfo of usersWithReminders) {
             // Send SMS reminder (mock implementation)
             console.log(`Reminder: ${userInfo.patientName} should take ${userInfo.medicineName} (${userInfo.dosage})`);
