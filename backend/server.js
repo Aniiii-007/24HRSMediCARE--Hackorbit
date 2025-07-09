@@ -242,59 +242,24 @@ app.get('/api/user/info', authenticateToken, async (req, res) => {
 });
 
 // AI Recommendation Route
+const getGeminiRecommendation = require("./geminihelper");
 app.get('/api/ai/recommendation', authenticateToken, async (req, res) => {
-    try {
+   try {
         const userInfo = await UserInfo.findOne({ userId: req.user.userId });
-        
+
         if (!userInfo) {
             return res.status(400).json({ message: 'Please fill your medical information first' });
         }
 
-        // Mock AI recommendation (replace with actual Gemini API call)
-        const recommendation = generateMockRecommendation(userInfo);
+        const recommendation = await getGeminiRecommendation(userInfo);
 
         res.json({ recommendation });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
-// Mock AI recommendation function (replace with actual Gemini API)
-function generateMockRecommendation(userInfo) {
-    return `
-        <h4>Personalized Health Recommendations for ${userInfo.patientName}</h4>
-        <p><strong>Based on your medication:</strong> ${userInfo.medicineName}</p>
-         ${userInfo.treatmentSection}
-        <h5>💊 Medication Tips:</h5>
-        <ul>
-            <li>Take your medication at ${userInfo.reminderTime} consistently every day</li>
-            <li>Follow the prescribed dosage: ${userInfo.dosage}</li>
-            <li>Set up reminders to avoid missing doses</li>
-        </ul>
-
-        <h5>🍽️ Meal Timing Recommendations:</h5>
-        <ul>
-            <li>Breakfast: ${userInfo.breakfastTime || 'Not specified'}</li>
-            <li>Lunch: ${userInfo.lunchTime || 'Not specified'}</li>
-            <li>Dinner: ${userInfo.dinnerTime || 'Not specified'}</li>
-        </ul>
-
-        <h5>🏥 General Health Tips:</h5>
-        <ul>
-            <li>Maintain regular contact with Dr. ${userInfo.doctorName}</li>
-            <li>Keep a medication diary to track effectiveness</li>
-            <li>Stay hydrated and maintain a balanced diet</li>
-            <li>Report any side effects to your healthcare provider</li>
-        </ul>
-
-        <h5>⚠️ Important Reminders:</h5>
-        <ul>
-            <li>Never stop or change medication without consulting your doctor</li>
-            <li>Keep emergency contact information readily available</li>
-            <li>Schedule regular check-ups as recommended</li>
-        </ul>
-    `;
-}
 
 // SMS Notification Route (Mock implementation)
 app.post('/api/notifications/sms', authenticateToken, async (req, res) => {
@@ -341,4 +306,4 @@ app.listen(PORT, () => {
 });
 
 // Export for testing
-module.exports = app;
+module.exports = app ;
