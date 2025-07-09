@@ -253,22 +253,24 @@ app.get('/api/user/info', authenticateToken, async (req, res) => {
 });
 
 // AI Recommendation Route
+const getGeminiRecommendation = require("./geminihelper");
 app.get('/api/ai/recommendation', authenticateToken, async (req, res) => {
-    try {
+   try {
         const userInfo = await UserInfo.findOne({ userId: req.user.userId });
-        
+
         if (!userInfo) {
             return res.status(400).json({ message: 'Please fill your medical information first' });
         }
 
-        // Mock AI recommendation (replace with actual Gemini API call)
-        const recommendation = generateMockRecommendation(userInfo);
+        const recommendation = await getGeminiRecommendation(userInfo);
 
         res.json({ recommendation });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
+
 
 // Mock AI recommendation function (replace with actual Gemini API)
 function generateMockRecommendation(userInfo) {
@@ -312,6 +314,7 @@ function generateMockRecommendation(userInfo) {
         </ul>
     `;
 }
+
 
 // SMS Notification Route (Mock implementation)
 app.post('/api/notifications/sms', authenticateToken, async (req, res) => {
@@ -366,4 +369,4 @@ app.listen(PORT, () => {
 });
 
 // Export for testing
-module.exports = app;
+module.exports = app ;
