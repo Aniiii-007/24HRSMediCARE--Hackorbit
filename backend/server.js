@@ -337,7 +337,7 @@ Take ${userInfo.medicineName1}, ${userInfo.medicineName2}, ${userInfo.medicineNa
 
 // Cron job for medication reminders (implement with node-cron)
 const cron = require('node-cron');
-
+const sendMedicineSMS = require('./smsHelper');
 // Schedule task to run every minute to check for medication reminders
 cron.schedule('* * * * *', async () => {
     try {
@@ -354,9 +354,23 @@ cron.schedule('* * * * *', async () => {
 });
 
         for (const userInfo of usersWithReminders) {
+            const phoneNumber = userInfo.phoneNumber; // User’s phone number
+            const dosage = userInfo.dosage;
             // Send SMS reminder (mock implementation)
-            console.log(`Reminder: ${userInfo.patientName} should take ${userInfo.medicineName} (${userInfo.dosage})`);
             // Implement actual SMS sending here
+              // Check and send SMS for each medicine
+            if (userInfo.reminderTimeformedicine1 === currentTime) {
+                await sendMedicineSMS(phoneNumber, userInfo.medicineName1, dosage);
+            }
+            if (userInfo.reminderTimeformedicine2 === currentTime) {
+                await sendMedicineSMS(phoneNumber, userInfo.medicineName2, dosage);
+            }
+            if (userInfo.reminderTimeformedicine3 === currentTime) {
+                await sendMedicineSMS(phoneNumber, userInfo.medicineName3, dosage);
+            }
+            if (userInfo.reminderTimeformedicine4 === currentTime) {
+                await sendMedicineSMS(phoneNumber, userInfo.medicineName4, dosage);
+            }
         }
     } catch (error) {
         console.error('Error in medication reminder cron job:', error);
