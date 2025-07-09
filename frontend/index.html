@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24Hrs Medicare - Medicine Reminder System</title>
+   
+     <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>24Hrs Medicare</h1>
+            <p>Your Personal Medicine Reminder System</p>
+        </div>
+
+        <!-- Auth Container -->
+        <div class="auth-container" id="authContainer">
+            <!-- Login Form -->
+            <div class="auth-form" id="loginForm">
+                <h2>Sign In</h2>
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label for="loginUsername">Username</label>
+                        <input type="text" id="loginUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" name="password" required>
+                    </div>
+                    <button type="submit" class="btn">Sign In</button>
+                    <div class="auth-switch">
+                        Don't have an account? <a href="#" onclick="showSignup()">Sign Up</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Signup Form -->
+            <div class="auth-form hidden" id="signupForm">
+                <h2>Sign Up</h2>
+                <form id="signupFormElement">
+                    <div class="form-group">
+                        <label for="signupUsername">Username</label>
+                        <input type="text" id="signupUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn">Sign Up</button>
+                    <div class="auth-switch">
+                        Already have an account? <a href="#" onclick="showLogin()">Sign In</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard" id="dashboard">
+            <button class="logout-btn" onclick="logout()">Logout</button>
+            
+            <div class="dashboard-header">
+                <h2>Welcome to Your Health Dashboard</h2>
+                <p>Manage your medications and get personalized health recommendations</p>
+            </div>
+            
+            <div class="dashboard-content">
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <h3>Navigation</h3>
+                    
+                    <div class="nav-item active" onclick="showDashboardHome()">
+                        <h4>🏠 Dashboard</h4>
+                        <p>Overview of features</p>
+                    </div>
+                    
+                    <div class="nav-item" onclick="showUserInfo()">
+                        <h4>💊 Medicine Info</h4>
+                        <p>Add your medications and schedule</p>
+                    </div>
+                    
+                    <div class="nav-item" onclick="showAIRecommendation()">
+                        <h4>🤖 AI Health Tips</h4>
+                        <p>Get personalized health recommendations</p>
+                    </div>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- Dashboard Home -->
+                    <div id="dashboardHome">
+                        <h2>Core Features</h2>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <h3>💊 Dose Reminder</h3>
+                                <p>Never miss a dose with our smart notification system that sends timely reminders based on your medication schedule.</p>
+                            </div>
+                            
+                            <div class="feature-card">
+                                <h3>🔄 Refill Reminder</h3>
+                                <p>Get notified when it's time to refill your prescriptions so you never run out of important medications.</p>
+                            </div>
+                            
+                            <div class="feature-card">
+                                <h3>📝 Missed Dose Log</h3>
+                                <p>Track and log any missed doses to maintain accurate medication history and discuss with your healthcare provider.</p>
+                            </div>
+                            
+                            <div class="feature-card">
+                                <h3>🤖 AI Recommendations</h3>
+                                <p>Get personalized health tips and medication guidance powered by advanced AI technology.</p>
+                            </div>
+                            
+                            <div class="feature-card">
+                                <h3>🌍 Multilingual Support</h3>
+                                <p>Access the platform in multiple languages for better accessibility and user experience.</p>
+                            </div>
+                            
+                            <div class="feature-card">
+                                <h3>📅 Calendar View</h3>
+                                <p>Visual calendar interface to view and manage all your medication schedules at a glance.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- User Info Form -->
+                    <div class="user-info-form" id="userInfoForm">
+                        <h2>Your Medical Information</h2>
+                        <form id="userInfoFormElement">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="patientName">Patient Name</label>
+                                    <input type="text" id="patientName" name="patientName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="patientAge">Age</label>
+                                    <input type="number" id="patientAge" name="patientAge" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="medicineName">Medicine Name</label>
+                                    <input type="text" id="medicineName" name="medicineName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="doctorName">Doctor's Name</label>
+                                    <input type="text" id="doctorName" name="doctorName" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="reminderTime">Reminder Time</label>
+                                    <input type="time" id="reminderTime" name="reminderTime" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dosage">Dosage</label>
+                                    <input type="text" id="dosage" name="dosage" placeholder="e.g., 1 tablet" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="breakfastTime">Breakfast Time</label>
+                                    <input type="time" id="breakfastTime" name="breakfastTime">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lunchTime">Lunch Time</label>
+                                    <input type="time" id="lunchTime" name="lunchTime">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="dinnerTime">Dinner Time</label>
+                                    <input type="time" id="dinnerTime" name="dinnerTime">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phoneNumber">Phone Number (for SMS)</label>
+                                    <input type="tel" id="phoneNumber" name="phoneNumber" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row full-width">
+                                <div class="form-group">
+                                    <label for="previousMedicines">Previous Medicines</label>
+                                    <input type="text" id="previousMedicines" name="previousMedicines" placeholder="List any previous medications">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row full-width">
+                                <div class="form-group">
+                                    <label for="medicalConditions">Medical Conditions</label>
+                                    <input type="text" id="medicalConditions" name="medicalConditions" placeholder="Any existing medical conditions">
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn">Save Information</button>
+                        </form>
+                    </div>
+                    
+                    <!-- AI Recommendation -->
+                    <div class="ai-recommendation" id="aiRecommendation">
+                        <h2>AI Health Recommendations</h2>
+                        <p>Get personalized health tips based on your medical information.</p>
+                        <button class="recommendation-btn" onclick="getAIRecommendation()">Get Recommendation for Your Health</button>
+                        <div class="recommendation-result" id="recommendationResult">
+                            <h3>AI Recommendation:</h3>
+                            <div id="recommendationText"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+       <script>
+         const API_BASE_URL = 'http://localhost:3000/api';
+        
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                showDashboard();
+            }
+        });
+
+        // Auth Functions
+        function showLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('signupForm').classList.add('hidden');
+        }
+
+        function showSignup() {
+            document.getElementById('signupForm').classList.remove('hidden');
+            document.getElementById('loginForm').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            loadUserData();
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            document.getElementById('authContainer').style.display = 'flex';
+            document.getElementById('dashboard').style.display = 'none';
+            showLogin();
+        }
+
+        // Navigation Functions
+        function showDashboardHome() {
+            document.getElementById('dashboardHome').style.display = 'block';
+            document.getElementById('userInfoForm').style.display = 'none';
+            document.getElementById('aiRecommendation').style.display = 'none';
+            updateActiveNav(0);
+        }
+
+        function showUserInfo() {
+            document.getElementById('dashboardHome').style.display = 'none';
+            document.getElementById('userInfoForm').style.display = 'block';
+            document.getElementById('aiRecommendation').style.display = 'none';
+            updateActiveNav(1);
+        }
+
+        function showAIRecommendation() {
+            document.getElementById('dashboardHome').style.display = 'none';
+            document.getElementById('userInfoForm').style.display = 'none';
+            document.getElementById('aiRecommendation').style.display = 'block';
+            updateActiveNav(2);
+        }
+
+        function updateActiveNav(index) {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach((item, i) => {
+                if (i === index) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // API Functions
+        async function makeRequest(endpoint, method = 'GET', data = null) {
+            const token = localStorage.getItem('token');
+            const config = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` })
+                }
+            };
+
+            if (data) {
+                config.body = JSON.stringify(data);
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.message || 'Request failed');
+                }
+                
+                return result;
+            } catch (error) {
+                console.error('Request error:', error);
+                throw error;
+            }
+        }
+
+        // Form Handlers
+        document.getElementById('signupFormElement').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            if (data.password !== data.confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            
+            try {
+                this.classList.add('loading');
+                await makeRequest('/auth/signup', 'POST', data);
+                alert('Account created successfully! Please sign in.');
+                showLogin();
+            } catch (error) {
+                alert('Error creating account: ' + error.message);
+            } finally {
+                this.classList.remove('loading');
+            }
+        });
+
+        document.getElementById('loginFormElement').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                this.classList.add('loading');
+                const result = await makeRequest('/auth/signin', 'POST', data);
+                localStorage.setItem('token', result.token);
+                showDashboard();
+            } catch (error) {
+                alert('Error signing in: ' + error.message);
+            } finally {
+                this.classList.remove('loading');
+            }
+        });
+
+        document.getElementById('userInfoFormElement').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                this.classList.add('loading');
+                await makeRequest('/user/info', 'POST', data);
+                alert('Information saved successfully!');
+            } catch (error) {
+                alert('Error saving information: ' + error.message);
+            } finally {
+                this.classList.remove('loading');
+            }
+        });
+
+        // Load user data on dashboard
+        async function loadUserData() {
+            try {
+                const userInfo = await makeRequest('/user/info');
+                if (userInfo.data) {
+                    populateForm(userInfo.data);
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        function populateForm(data) {
+            Object.keys(data).forEach(key => {
+                const field = document.getElementById(key);
+                if (field) {
+                    field.value = data[key];
+                }
+            });
+        }
+
+        // AI Recommendation
+        async function getAIRecommendation() {
+            try {
+                const button = document.querySelector('.recommendation-btn');
+                const result = document.getElementById('recommendationResult');
+                const text = document.getElementById('recommendationText');
+                
+                button.classList.add('loading');
+                button.textContent = 'Getting Recommendation...';
+                
+                const recommendation = await makeRequest('/ai/recommendation');
+                
+                text.innerHTML = recommendation.recommendation;
+                result.style.display = 'block';
+            } catch (error) {
+                alert('Error getting recommendation: ' + error.message);
+            } finally {
+                const button = document.querySelector('.recommendation-btn');
+                button.classList.remove('loading');
+                button.textContent = 'Get Recommendation for Your Health';
+            }
+        }
+       </script>
+   
+</body>
+</html>
