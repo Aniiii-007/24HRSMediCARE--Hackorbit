@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { z } = require('zod');
+const { z, number } = require('zod');
 
 
 const app = express();
@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
 const userInfoSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     patientName: { type: String, required: true },
-    patientAge: { type: Number, required: true },
+    patientAge:{type : Number , required:true},
     medicineName: { type: String, required: true },
     doctorName: { type: String, required: true },
     reminderTime: { type: String, required: true },
@@ -71,7 +71,23 @@ const signinSchema = z.object({
 
 const userInfoSchema_validation = z.object({
     patientName: z.string().min(1),
-    patientAge: z.number().min(1).max(150),
+     phoneNumber: z.preprocess(
+        (val) => (typeof val === "string" ? val.trim() : val),
+        z.string().min(10)
+    ),
+    patientAge: z.preprocess(
+    (val) => {
+        if (typeof val === "string" && /^\d+$/.test(val.trim())) {
+            return Number(val.trim());
+        }
+        if (typeof val === "number" && !isNaN(val)) {
+            return val;
+        }
+        return undefined; // Reject invalid input
+    },
+    z.number().min(1, "Age must be at least 1").max(150, "Age must be less than 150")
+)
+,
     medicineName: z.string().min(1),
     doctorName: z.string().min(1),
     reminderTime: z.string(),
@@ -201,6 +217,7 @@ app.post('/api/user/info', authenticateToken, async (req, res) => {
 
         res.json({ message: 'User information saved successfully', data: userInfo });
     } catch (error) {
+        console.log(error);
         if (error instanceof z.ZodError) {
             return res.status(400).json({ message: error.errors[0].message });
         }
