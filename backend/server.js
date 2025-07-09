@@ -264,7 +264,7 @@ function generateMockRecommendation(userInfo) {
     return `
         <h4>Personalized Health Recommendations for ${userInfo.patientName}</h4>
         <p><strong>Based on your medication:</strong> ${userInfo.medicineName}</p>
-         ${userInfo.tratmentSection}
+         ${userInfo.treatmentSection}
         <h5>💊 Medication Tips:</h5>
         <ul>
             <li>Take your medication at ${userInfo.reminderTime} consistently every day</li>
